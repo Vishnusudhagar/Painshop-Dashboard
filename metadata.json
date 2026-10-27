@@ -1,0 +1,6 @@
+{
+  "name": "Baxy Paintshop Report",
+  "description": "Industrial paintshop production tracking, quality KPIs, defect pareto analysis, and real-time Google Sheets synchronization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

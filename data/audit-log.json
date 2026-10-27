@@ -1,0 +1,280 @@
+[
+  {
+    "id": "audit_1793120306142_4cv4x",
+    "timestamp": "2026-10-27T16:58:26.142Z",
+    "action": "USER_REMOVED",
+    "actor": "admin1",
+    "details": "User account \"admin2\" (admin) was removed by administrator \"admin1\"."
+  },
+  {
+    "id": "audit_1793120306133_mesdf",
+    "timestamp": "2026-10-27T16:58:26.133Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793120296606_nq6mr",
+    "timestamp": "2026-10-27T16:58:16.606Z",
+    "action": "USER_LOGIN",
+    "actor": "admin2",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793120296554_n3rx9",
+    "timestamp": "2026-10-27T16:58:16.554Z",
+    "action": "USER_PASSWORD_RESET",
+    "actor": "admin1",
+    "details": "Password for user \"admin2\" was reset by administrator \"admin1\". All existing sessions invalidated."
+  },
+  {
+    "id": "audit_1793120296492_wkvpf",
+    "timestamp": "2026-10-27T16:58:16.492Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793120278824_ck9yl",
+    "timestamp": "2026-10-27T16:57:58.824Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793120266629_lj9f2",
+    "timestamp": "2026-10-27T16:57:46.629Z",
+    "action": "SYSTEM_BOOTSTRAP",
+    "actor": "System",
+    "details": "Permanent administrator account \"admin1\" configured with role Administrator."
+  },
+  {
+    "id": "audit_1793120165526_hczey",
+    "timestamp": "2026-10-27T16:56:05.526Z",
+    "action": "USER_LOGIN",
+    "actor": "admin2",
+    "details": "Successful login (admin) from IP 2409:40f4:3155:15ee:da:3ff:fe6e:fc0, 169.254.169.126",
+    "ip": "2409:40f4:3155:15ee:da:3ff:fe6e:fc0, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793120076692_2s18a",
+    "timestamp": "2026-10-27T16:54:36.692Z",
+    "action": "USER_REMOVED",
+    "actor": "admin2",
+    "details": "User account \"admin1\" (admin) was removed by administrator \"admin2\"."
+  },
+  {
+    "id": "audit_1793120065008_k9y9l",
+    "timestamp": "2026-10-27T16:54:25.008Z",
+    "action": "FIRST_LOGIN_PASSWORD_CHANGED",
+    "actor": "admin2",
+    "details": "Initial password changed on first login by user \"admin2\""
+  },
+  {
+    "id": "audit_1793120051724_usyun",
+    "timestamp": "2026-10-27T16:54:11.724Z",
+    "action": "USER_LOGIN",
+    "actor": "admin2",
+    "details": "Successful login (admin) from IP 2409:40f4:3155:15ee:da:3ff:fe6e:fc0, 169.254.169.126",
+    "ip": "2409:40f4:3155:15ee:da:3ff:fe6e:fc0, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793119989556_b2dwq",
+    "timestamp": "2026-10-27T16:53:09.556Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"admin2\" (admin) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793119897335_wznth",
+    "timestamp": "2026-10-27T16:51:37.335Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793118316719_lo3an",
+    "timestamp": "2026-10-27T16:25:16.719Z",
+    "action": "USER_REMOVED",
+    "actor": "admin1",
+    "details": "User account \"optest\" (operator) was removed by administrator \"admin1\"."
+  },
+  {
+    "id": "audit_1793118316713_xdf1o",
+    "timestamp": "2026-10-27T16:25:16.713Z",
+    "action": "USER_LOGIN",
+    "actor": "optest",
+    "details": "Successful login (operator) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793118316661_o7sww",
+    "timestamp": "2026-10-27T16:25:16.661Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"optest\" (operator) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793118316606_ix3yy",
+    "timestamp": "2026-10-27T16:25:16.606Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793118306430_mruc8",
+    "timestamp": "2026-10-27T16:25:06.430Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793118297223_x5j3m",
+    "timestamp": "2026-10-27T16:24:57.223Z",
+    "action": "USER_REMOVED",
+    "actor": "admin1",
+    "details": "User account \"admin2\" (admin) was removed by administrator \"admin1\"."
+  },
+  {
+    "id": "audit_1793118297220_0w3zc",
+    "timestamp": "2026-10-27T16:24:57.220Z",
+    "action": "USER_REMOVED",
+    "actor": "admin1",
+    "details": "User account \"oprater2\" (operator) was removed by administrator \"admin1\"."
+  },
+  {
+    "id": "audit_1793118297215_zdid6",
+    "timestamp": "2026-10-27T16:24:57.215Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"oprater2\" (operator) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793118297161_cyv5s",
+    "timestamp": "2026-10-27T16:24:57.161Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"admin2\" (admin) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793118297028_f9umj",
+    "timestamp": "2026-10-27T16:24:57.028Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793117428514_p12nu",
+    "timestamp": "2026-10-27T16:10:28.514Z",
+    "action": "USER_DELETED",
+    "actor": "admin1",
+    "details": "User account \"test_removable\" (operator) was deleted by administrator \"admin1\"."
+  },
+  {
+    "id": "audit_1793117428508_atgj9",
+    "timestamp": "2026-10-27T16:10:28.508Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"test_removable\" (operator) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793117428425_sv1a5",
+    "timestamp": "2026-10-27T16:10:28.425Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 127.0.0.1",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793115086434_5if4e",
+    "timestamp": "2026-10-27T15:31:26.434Z",
+    "action": "USER_CREATED",
+    "actor": "admin1",
+    "details": "New account \"oprater1\" (operator) created by admin \"admin1\""
+  },
+  {
+    "id": "audit_1793115055059_qsemk",
+    "timestamp": "2026-10-27T15:30:55.059Z",
+    "action": "FIRST_LOGIN_PASSWORD_CHANGED",
+    "actor": "admin1",
+    "details": "Initial password changed on first login by user \"admin1\""
+  },
+  {
+    "id": "audit_1793115039212_0nhm0",
+    "timestamp": "2026-10-27T15:30:39.212Z",
+    "action": "USER_LOGIN",
+    "actor": "admin1",
+    "details": "Successful login (admin) from IP 2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114819801_vk7tf",
+    "timestamp": "2026-10-27T15:26:59.801Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Liquid Coating Line - H - 360 (Loading). Google Form transmission status: Success (200 OK)",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114767361_pajwg",
+    "timestamp": "2026-10-27T15:26:07.361Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Powder Coating Line - H - 321 (Quality Control). Google Form transmission status: Success (200 OK)",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114758732_nufck",
+    "timestamp": "2026-10-27T15:25:58.732Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Powder Coating Line - H - 321 (Unloading). Google Form transmission status: Success (200 OK)",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114731293_n301w",
+    "timestamp": "2026-10-27T15:25:31.293Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Powder Coating Line - H - 321 (Unloading). Google Form transmission status: Success (200 OK)",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114685217_584du",
+    "timestamp": "2026-10-27T15:24:45.217Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Powder Coating Line - H - 321 (Loading). Google Form transmission status: Success (200 OK)",
+    "ip": "2409:40f4:3017:1cd:e4e4:30ff:fed9:3d4e, 169.254.169.126"
+  },
+  {
+    "id": "audit_1793114637354_36f4g",
+    "timestamp": "2026-10-27T15:23:57.354Z",
+    "action": "SYSTEM_BOOTSTRAP",
+    "actor": "System",
+    "details": "Initial administrator account \"admin1\" provisioned with mandatory password change."
+  },
+  {
+    "id": "audit_1793099569280_kzy8t",
+    "timestamp": "2026-10-27T11:12:49.280Z",
+    "action": "PRODUCTION_LOG_SUBMITTED",
+    "actor": "Operator/User",
+    "details": "Log entry recorded for Powder Coating Line - H - 321 (Loading). Google Form transmission status: Success (200 OK)",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "audit_1793099566616_il635",
+    "timestamp": "2026-10-27T11:12:46.616Z",
+    "action": "SYSTEM_BOOTSTRAP",
+    "actor": "System",
+    "details": "Initial administrator account \"admin1\" provisioned with mandatory password change."
+  }
+]

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baxy Paintshop Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#0b0f1e;--card:#131a31;--line:#222b4a;--tx:#e8ecff;--mut:#8590b8;--a:#7c6cff;--g:#34d399;--o:#f59e0b;--r:#f43f5e}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#1b2250 0,var(--bg) 60%) fixed;color:var(--tx);font-family:system-ui,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.hd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:linear-gradient(100deg,#0a1a46,#12236b 60%,#1b2d86);border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{font-size:38px;line-height:1;padding-right:14px;border-right:1px solid #ffffff44}
+h1{margin:0;font-size:26px;letter-spacing:.04em;font-weight:800}
+.nv{font-size:14px;color:#c9d4ff;margin-top:3px}
+.logo{cursor:pointer}.logo img{height:54px;max-width:210px;object-fit:contain;display:block}
+.tag{font-style:italic;color:#c9d4ff;font-size:15px}
+.dt{display:flex;gap:10px;align-items:center}.dt .ic{font-size:30px}
+.dt small{display:block;color:#aab8ee;font-size:12px}.dt b{font-size:18px}
+.app{display:grid;grid-template-columns:210px 1fr}
+nav{padding:14px 10px;border-right:1px solid var(--line);min-height:calc(100vh - 80px)}
+nav button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;color:var(--mut);padding:12px 14px;border-radius:10px;font-size:15px;cursor:pointer;margin-bottom:4px}
+nav button.on{background:var(--a);color:#fff;font-weight:600}
+main{padding:14px 18px 40px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.live{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--g);margin-right:auto}
+.live i{width:9px;height:9px;border-radius:50%;background:currentColor;display:inline-block}
+.live.off{color:var(--mut)}
+.btn{background:var(--a);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer;font-size:13px}
+.btn.alt{background:#1d2646;color:var(--tx)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.fl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.fl label{display:block;font-size:12px;color:var(--mut);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.fl input[type=date]{width:100%;background:#1d2646;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:7px;font-size:13px;color-scheme:dark}
+.fl select{width:100%;background:#1d2646;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:linear-gradient(135deg,var(--card) 35%,var(--cb));border:1px solid var(--line);border-top:3px solid var(--c);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.kpi[role=button]{cursor:pointer}
+.kpi .row{display:flex;gap:12px;align-items:center}.kpi .em{font-size:38px}
+.kpi .t{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:34px;font-weight:800;line-height:1.1}.kpi .v small{font-size:14px;color:var(--mut);margin-left:6px}
+.kpi .d{border-top:1px solid #ffffff1c;padding-top:8px;font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.m{color:var(--mut);font-size:12px}
+.prog{height:6px;border-radius:99px;background:#1d2646;overflow:hidden;flex:1;min-width:60px}.prog i{display:block;height:100%;background:var(--g)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.w2{grid-column:span 2}
+@media(max-width:860px){.w2{grid-column:span 1}.app{grid-template-columns:1fr}
+ nav{display:flex;overflow-x:auto;gap:6px;padding:10px 14px;border-right:0;min-height:0;position:sticky;top:0;z-index:5;background:#0b0f1eee}
+ nav button{width:auto;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:8px 16px;margin:0}
+ .tag{display:none}h1{font-size:22px}main{padding:12px 14px 40px}}
+.pn{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;min-width:0}
+.pn h3{margin:0 0 10px;font-size:16px}
+.ch{position:relative;height:290px}
+.tw{overflow:auto;max-height:460px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th{color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}
+.tbl tr.tot td{font-weight:800;background:#18213f}
+.g{color:var(--g)}.o{color:var(--o)}.r{color:var(--r)}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.lg{width:100%;font-size:14px;margin-top:8px;border-collapse:collapse}.lg td{padding:5px 2px}.lg td:last-child{text-align:right;color:var(--mut)}
+.pill{padding:2px 8px;border-radius:999px;font-size:11px;background:#1d2646}
+.note{font-size:12px;color:var(--mut);text-align:center;margin-top:14px}
+.empty{padding:30px;text-align:center;color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="hd">
+  <div class="brand"><div class="logo" id="logo" title="Tap to change logo" onclick="document.getElementById('logoF').click()">🎨</div><input type="file" id="logoF" accept="image/*" hidden><div><h1>BAXY PAINTSHOP REPORT</h1><div class="nv">Production &nbsp;|&nbsp; Quality &nbsp;|&nbsp; Performance</div></div></div>
+  <div class="tag">Better Coating &nbsp;•&nbsp; Better Quality &nbsp;•&nbsp; Higher Productivity</div>
+  <div class="dt"><div class="ic">📅</div><div><small>Date</small><b id="today"></b><small id="lr"></small></div></div>
+</div>
+
+<div class="app">
+  <nav id="side">
+    <button data-p="overview" class="on">🏠 Overview</button>
+    <button data-p="production">🏭 Production</button>
+    <button data-p="quality">🛡️ Quality</button>
+    <button data-p="defects">⚠️ Defects Analysis</button>
+    <button data-p="trends">📈 Trends</button>
+    <button data-p="reports">📄 Reports</button>
+  </nav>
+  <main>
+    <div class="bar">
+      <span class="live" id="pill"><i></i><span id="pillt">Sample data</span></span>
+      <button class="btn" onclick="connectSheet()">🔗 Connect Sheet</button>
+      <button class="btn alt" onclick="document.getElementById('f').click()">Upload Excel/CSV</button>
+      <button class="btn alt" onclick="refreshNow()">⟳ Refresh</button>
+      <input type="file" id="f" accept=".xlsx,.xls,.csv" hidden>
+    </div>
+    <div class="filters">
+      <div class="fl"><label>Date Range</label><select id="fDate"><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="last7">Last 7 days</option><option value="lastweek">Last week</option><option value="month" selected>This month</option><option value="all">All data</option><option value="lastmonth">Last month</option><option value="custom">Custom date range</option></select><div id="cust" style="display:none;gap:6px;margin-top:8px;flex-direction:column"><input type="date" id="dFrom"><input type="date" id="dTo"></div></div>
+      <div class="fl"><label>Shift</label><select id="fShift"></select></div>
+      <div class="fl"><label>Model</label><select id="fModel"></select></div>
+      <div class="fl"><label>Line</label><select id="fLine"></select></div>
+    </div>
+    <div id="view"></div>
+    <div class="note" id="note"></div>
+  </main>
+</div>
+
+<script>
+if(typeof Chart==='undefined'||typeof XLSX==='undefined'){document.addEventListener('DOMContentLoaded',()=>{document.getElementById('view').innerHTML='<div class="pn"><h3>⚠️ Libraries did not load</h3><div class="m">Chart.js / SheetJS could not be downloaded. Open this file in a browser (Chrome/Safari) with internet access, not in a file previewer.</div></div>'})}
+/* ================= SETTINGS ================= */
+let MONTHLY_TARGET=60000;          // click the green Monthly Target card to change
+const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vStOPoBnHm-C_F6quv4JItMXOk6DkeFnWd5anw1dUef76cCQt7fbOl8QjdfQcSukGsU_1auHWTQbaeU/pub?output=csv";
+const REFRESH_SECONDS=60;
+const shiftOf=h=>(h>=6&&h<14)?'A':(h>=14&&h<22)?'B':'C';   // A 06-14, B 14-22, C 22-06
+const SHIFT_TXT={A:'06:00 - 14:00',B:'14:00 - 22:00',C:'22:00 - 06:00'};
+const REJ_GREEN=3.5,REJ_AMBER=4.5;  // rejection % colour limits
+
+/* ================= DATE HELPERS ================= */
+var DATE_ORDER='DMY';
+function parseStr(s){
+  s=String(s).trim();
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ]+(\d{1,2}):(\d{2}))?/);
+  if(m)return{y:+m[1],mo:+m[2],d:+m[3],h:m[4]!=null?+m[4]:null};
+  m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})(?:[ ,T]+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AaPp][Mm])?)?/);
+  if(m){const a=+m[1],b=+m[2];let d,mo;
+    if(DATE_ORDER==='MDY'){mo=a;d=b}else{d=a;mo=b}
+    let h=m[4]!=null?+m[4]:null;
+    if(h!=null&&m[6]){const p=m[6].toLowerCase();if(p==='pm'&&h<12)h+=12;if(p==='am'&&h===12)h=0}
+    let y=+m[3];if(y<100)y+=2000;return{y,mo,d,h}}
+  const dt=new Date(s);
+  return isNaN(dt)?null:{y:dt.getFullYear(),mo:dt.getMonth()+1,d:dt.getDate(),h:dt.getHours()};
+}
+function detectOrder(raw){
+  const vals=[];
+  for(const r of raw)for(const k in r){
+    if(!/date|time/i.test(k))continue;
+    const m=String(r[k]).match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
+    if(m)vals.push([+m[1],+m[2],+m[3]]);
+  }
+  for(const[a,b]of vals){if(a>12){DATE_ORDER='DMY';return}if(b>12){DATE_ORDER='MDY';return}}
+  /* every date is ambiguous (day<=12): pick the order that puts fewer dates in the future */
+  const now=new Date(),fut=o=>vals.filter(([a,b,y])=>{y=y<100?2000+y:y;const mo=o==='MDY'?a:b,d=o==='MDY'?b:a;return new Date(y,mo-1,d)>now}).length;
+  DATE_ORDER=fut('MDY')<fut('DMY')?'MDY':'DMY';
+}
+function keyOf(v){
+  if(v===''||v==null)return null;
+  if(typeof v==='string'&&/^\d+(\.\d+)?$/.test(v.trim()))v=parseFloat(v);
+  if(typeof v==='number')return new Date(Math.round((v-25569)*86400000)).toISOString().slice(0,10);
+  const p=parseStr(v);if(!p||p.mo<1||p.mo>12)return null;
+  return p.y+'-'+String(p.mo).padStart(2,'0')+'-'+String(p.d).padStart(2,'0');
+}
+function shiftFrom(v){
+  if(v===''||v==null)return '—';
+  if(typeof v==='string'&&/^\d+(\.\d+)?$/.test(v.trim()))v=parseFloat(v);
+  if(typeof v==='number')return shiftOf(Math.floor((v%1)*24));
+  const p=parseStr(v);return p&&p.h!=null?shiftOf(p.h):'—';
+}
+const dn=k=>{const[a,b,c]=k.split('-').map(Number);return Date.UTC(a,b-1,c)/864e5};
+const num=v=>{const s=String(v).replace(/,/g,'').trim();return /^-?\d+(\.\d+)?$/.test(s)?parseFloat(s):0};
+const fmt=n=>Math.round(n).toLocaleString('en-IN');
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dlab=k=>{const[a,b,c]=k.split('-');return c+'-'+MON[+b-1]};
+
+/* ================= DATA ================= */
+const DEFAULT_ROWS=[
+{ID:7,Start:46309.906458333331,Date:46310,Line:"Powder Coating Line",Part:"H-321",Stage:"Loading",Load:200,Insp:0,OK:0,NOK:0,Defect:""},
+{ID:8,Start:46309.907002314816,Date:46310,Line:"Powder Coating Line",Part:"H-321",Stage:"Unloading",Load:0,Insp:200,OK:195,NOK:5,Defect:"Dry/uncover;Rundown;"},
+{ID:9,Start:46309.907256944447,Date:46310,Line:"Liquid Line",Part:"H-280",Stage:"Loading",Load:200,Insp:0,OK:0,NOK:0,Defect:""},
+{ID:10,Start:46309.907418981478,Date:46310,Line:"Liquid Line",Part:"H-280",Stage:"Unloading",Load:0,Insp:200,OK:195,NOK:5,Defect:"Dry/uncover;Rundown;"}
+].map(r=>({ID:r.ID,Line:r.Line,Part:r.Part,Stage:r.Stage,Load:r.Load,Insp:r.Insp,OK:r.OK,NOK:r.NOK,Rej:0,Rework:0,Defect:r.Defect,DateKey:keyOf(r.Date),Shift:shiftFrom(r.Start)}));
+
+function normalize(raw){
+  detectOrder(raw);
+  const N=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+  return raw.map(r=>{
+    const keys=Object.keys(r).map(k=>[N(k),k]);
+    const g=(...names)=>{for(const n of names){const f=keys.find(x=>x[0]===n);if(f&&String(r[f[1]]).trim()!=='')return r[f[1]]}return ''};
+    const start=g('timestamp','starttime');let date=String(g('date')).trim();
+    const tsKey=keyOf(start);
+    if(/^\d{1,2}[\/.-]\d{1,2}$/.test(date))date+='/'+(tsKey?tsKey.slice(0,4):new Date().getFullYear());
+    let dk=keyOf(date);
+    if(!dk||dn(dk)>dn(localKey(new Date())))dk=tsKey||dk;
+    const sh=String(g('shift')).trim();
+    return{ID:g('id'),Line:String(g('line')).trim(),Part:String(g('partno','partno2','model','model1','model2','partnumber')).trim(),
+      Stage:(st=>/\d[\/.-]\d/.test(st)?'':st)(String(g('stage')).trim()),
+      Load:num(g('loadingqty','loadingquantity','loadqty')),Insp:num(g('totalinspectionqty','inspectionqty','inspectedqty')),
+      OK:num(g('okpartqty','okqty','okparts')),NOK:num(g('notokpartqty','notokpart','notokqty')),Rework:num(g('totalreworkparts','totalreworkpart','totalreworkqty','reworkparts','reworkpart','reworkqty','totalrework','rework')),Rej:num(g('rejectedpart','rejectedpartqty','rejectedqty','rejectionqty')),
+      Defect:String(g('defect','defects','defecttype','defect1','defects1')||''),DateKey:dk,
+      Shift:sh?((sh.match(/([ABC])\s*$/i)||[])[1]||sh.charAt(0)).toUpperCase():shiftFrom(start)};
+  }).map(r=>{if(!r.Insp&&(r.OK+r.NOK)>0)r.Insp=r.OK+r.NOK;   // Inspected fallback = OK + Not OK (before rework)
+      r.NOK=Math.max(0,r.NOK-r.Rework);   // Not OK = Not OK Part - Total Rework Parts
+      return r})
+    .filter(r=>r.DateKey);
+}
+
+/* ================= STATE / FILTERS ================= */
+const $=id=>document.getElementById(id);
+const fDate=$('fDate'),fShift=$('fShift'),fModel=$('fModel'),fLine=$('fLine'),view=$('view'),note=$('note');
+let ROWS=CSV_URL?[]:DEFAULT_ROWS,page='overview',USER_DATE=false;
+function fillSel(el,vals){const cur=el.value;el.innerHTML='<option value="All">All</option>'+vals.map(v=>`<option>${v}</option>`).join('');el.value=[...el.options].some(o=>o.value===cur)?cur:'All'}
+function setFilters(){
+  const u=k=>[...new Set(ROWS.map(r=>r[k]).filter(v=>v&&v!=='—'))].sort();
+  fillSel(fShift,u('Shift'));fillSel(fModel,u('Part'));fillSel(fLine,u('Line'));
+}
+const pad2=n=>String(n).padStart(2,'0');
+const localKey=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const fromDn=d=>new Date(d*864e5).toISOString().slice(0,10);
+function compute(){
+  const sv=fShift.value,mv=fModel.value,lv=fLine.value;
+  const b=ROWS.filter(r=>(sv==='All'||r.Shift===sv)&&(mv==='All'||r.Part===mv)&&(lv==='All'||r.Line===lv));
+  const tk=localKey(new Date()),T=dn(tk),[y,m]=tk.split('-').map(Number),opt=fDate.value;
+  let lo,hi,plo,phi,lbl;
+  if(opt==='today'){lo=hi=T;plo=phi=T-1;lbl='vs yesterday'}
+  else if(opt==='yesterday'){lo=hi=T-1;plo=phi=T-2;lbl='vs previous day'}
+  else if(opt==='last7'){lo=T-6;hi=T;plo=lo-7;phi=lo-1;lbl='vs previous 7 days'}
+  else if(opt==='lastweek'){const dow=(new Date(T*864e5).getUTCDay()+6)%7,mon=T-dow;lo=mon-7;hi=mon-1;plo=lo-7;phi=lo-1;lbl='vs previous week'}
+  else if(opt==='lastmonth'){lo=Date.UTC(y,m-2,1)/864e5;hi=Date.UTC(y,m-1,0)/864e5;plo=Date.UTC(y,m-3,1)/864e5;phi=lo-1;lbl='vs previous month'}
+  else if(opt==='all'){const ks=ROWS.map(r=>dn(r.DateKey));lo=ks.length?Math.min(...ks):T;hi=ks.length?Math.max(...ks):T;plo=lo-1;phi=lo-2;lbl='all data'}
+  else if(opt==='custom'){
+    const f=$('dFrom').value,t=$('dTo').value;lo=f?dn(f):T;hi=t?dn(t):T;if(hi<lo){const x=lo;lo=hi;hi=x}
+    const n=hi-lo+1;plo=lo-n;phi=lo-1;lbl='vs previous period'}
+  else{lo=Date.UTC(y,m-1,1)/864e5;hi=T;plo=Date.UTC(y,m-2,1)/864e5;phi=lo-1;lbl='vs last month'}
+  const inR=(r,a,z)=>{const d=dn(r.DateKey);return d>=a&&d<=z};
+  const lo2=Math.min(lo,hi-9);
+  return{b,cur:b.filter(r=>inR(r,lo,hi)),prev:b.filter(r=>inR(r,plo,phi)),trend:b.filter(r=>inR(r,lo2,hi)),opt,lbl,lo,hi};
+}
+const sum=(rows,f)=>rows.reduce((a,r)=>a+r[f],0);
+function grp(rows,kf){const m={};rows.forEach(r=>{const k=kf(r);m[k]=m[k]||{k,load:0,insp:0,ok:0,nok:0,rej:0,rw:0,n:0};m[k].load+=r.Load;m[k].insp+=r.Insp;m[k].ok+=r.OK;m[k].nok+=r.NOK;m[k].rej+=r.Rej||0;m[k].rw+=r.Rework||0;m[k].n++});const out=Object.values(m);out.forEach(o=>o.nok=Math.max(0,o.nok-o.rej));return out}
+const rej=o=>o.insp?(o.rej||0)/o.insp*100:0;   // rejection % = Rejected Part / Inspected
+const byKey=(a,b)=>a.k<b.k?-1:a.k>b.k?1:0;
+const rc=p=>p<=REJ_GREEN?'g':p<=REJ_AMBER?'o':'r';
+function defects(rows,top){
+  const d={};rows.forEach(r=>{const t=r.Defect.split(/[;,]/).map(s=>s.trim()).filter(Boolean);if(!t.length||!r.NOK)return;t.forEach(n=>d[n]=(d[n]||0)+r.NOK/t.length)});
+  let e=Object.entries(d).sort((a,b)=>b[1]-a[1]);
+  if(top&&e.length>top+1){const rest=e.slice(top).reduce((a,x)=>a+x[1],0);e=[...e.slice(0,top),['Others',rest]]}
+  return e;
+}
+const DCOL=['#3b82f6','#f97316','#22c55e','#a855f7','#facc15','#9ca3af'];
+
+/* ================= CHART SETUP ================= */
+Chart.defaults.color='#8590b8';Chart.defaults.borderColor='#222b4a';Chart.defaults.font.family='system-ui,Segoe UI,Roboto,sans-serif';Chart.defaults.animation=false;
+Chart.register({id:'vl',afterDatasetsDraw(c,a,o){
+  if(!o||!o.on)return;const x=c.ctx;x.save();x.fillStyle='#e8ecff';x.font='bold 12px system-ui';x.textAlign='center';
+  c.getDatasetMeta(0).data.forEach((b,i)=>{const v=c.data.datasets[0].data[i];x.fillText((o.dec!=null?v.toFixed(o.dec):fmt(v))+(o.suffix||''),b.x,b.y-6)});x.restore()}});
+Chart.register({id:'dp',afterDatasetsDraw(c,a,o){
+  if(!o||!o.on)return;const x=c.ctx,m=c.getDatasetMeta(0),d=c.data.datasets[0].data,t=d.reduce((p,q)=>p+q,0);
+  x.save();x.textAlign='center';x.textBaseline='middle';
+  m.data.forEach((el,i)=>{if(!t||d[i]/t<.06)return;const p=el.tooltipPosition();x.fillStyle='#fff';x.font='bold 12px system-ui';x.fillText((d[i]/t*100).toFixed(1)+'%',p.x,p.y)});
+  const cx=m.data[0]?m.data[0].x:c.width/2,cy=m.data[0]?m.data[0].y:c.height/2;
+  x.fillStyle='#e8ecff';x.font='bold 24px system-ui';x.fillText(fmt(t),cx,cy-8);x.fillStyle='#8590b8';x.font='12px system-ui';x.fillText(o.label||'',cx,cy+14);x.restore()}});
+const charts={};
+const kill=()=>{for(const k in charts){try{charts[k].destroy()}catch(e){}delete charts[k]}};
+const mk=(id,cfg)=>{const el=$(id);if(el)charts[id]=new Chart(el,cfg)};
+const opt=(x={})=>({responsive:true,maintainAspectRatio:false,...x});
+const yPct={beginAtZero:true,ticks:{callback:v=>v+'%'}};
+const barOpt=(suffix)=>opt({layout:{padding:{top:20}},plugins:{legend:{display:false},vl:{on:true,dec:1,suffix:'%'}},scales:{y:yPct}});
+const cv=(id,h)=>`<div class="ch"${h?` style="height:${h}px"`:''}><canvas id="${id}"></canvas></div>`;
+function tbl(list,first){return '<div class="tw"><table class="tbl"><tr>'+[first,'Loaded','Inspected','OK','Rework','Rejection','Rej %'].map(h=>`<th>${h}</th>`).join('')+'</tr>'+
+  list.map(o=>`<tr><td>${o.k}</td><td>${fmt(o.load)}</td><td>${fmt(o.insp)}</td><td class="g">${fmt(o.ok)}</td><td class="o">${fmt(o.rw)}</td><td class="r">${fmt(o.rej)}</td><td class="${rc(rej(o))}">${rej(o).toFixed(1)}%</td></tr>`).join('')+'</table></div>'}
+
+/* ================= SHARED BLOCKS ================= */
+function kpiHTML(c){
+  const{cur,prev,opt:o}=c,okq=sum(cur,'OK'),rw=sum(cur,'Rework'),prod=okq+rw,rj=sum(cur,'Rej'),netNG=rows=>Math.max(0,sum(rows,'NOK')-sum(rows,'Rej')),ng=netNG(cur);
+  const delta=f=>{if(!prev)return null;const g=f==='NOK'?netNG:f==='OK'?(rows=>sum(rows,'OK')+sum(rows,'Rework')):(rows=>sum(rows,f)),p=g(prev);return p?((g(cur)-p)/p*100):null};
+  const lbl=c.lbl;
+  const dl=(v,good)=>v==null?'<span class="m">no previous data</span>':`<span style="color:${(v>=0)===good?'#34d399':'#f43f5e'}">${v>=0?'▲':'▼'} <b>${v>=0?'+':''}${v.toFixed(1)}%</b></span><span class="m">${lbl}</span>`;
+  const pct=MONTHLY_TARGET?prod/MONTHLY_TARGET*100:0;
+  const K=(col,bg,em,t,v,d,extra='')=>`<div class="kpi" style="--c:${col};--cb:${bg}"${extra}><div class="row"><div class="em">${em}</div><div><div class="t">${t}</div><div class="v">${v}<small>Nos</small></div></div></div><div class="d">${d}</div></div>`;
+  return '<div class="kpis">'+
+   K('#22c55e','#0f3d33','🎯','Monthly Target',fmt(MONTHLY_TARGET),`<b>${pct.toFixed(1)}%</b><span class="m">achieved</span><div class="prog"><i style="width:${Math.min(pct,100)}%"></i></div>`,' onclick="editTarget()" title="Click to edit target" role="button"')+
+   K('#3b82f6','#14307a','📦','Total Production',fmt(prod),dl(delta('OK'),true)+`<span class="m" style="width:100%">OK ${fmt(okq)} + Rework ${fmt(rw)}</span>`)+
+   K('#f59e0b','#4a3510','🔧','Rework Parts Qty',fmt(rw),dl(delta('Rework'),true)+`<span class="m" style="width:100%">included in Total Production</span>`)+
+   K('#f43f5e','#4a1522','❌','Rejected Part Qty',fmt(rj),dl(delta('Rej'),false))+'</div>';
+}
+function shiftTable(rows){
+  const g=grp(rows,r=>r.Shift).sort(byKey),t=grp(rows,()=>'T')[0]||{insp:0,ok:0,nok:0,rw:0};
+  return '<div class="tw"><table class="tbl"><tr><th>Shift</th><th>Total Production</th><th>OK</th><th>Rework</th><th>Rejection %</th></tr>'+
+   g.map(o=>`<tr><td><b>${o.k}</b> <span class="m">${SHIFT_TXT[o.k]?'('+SHIFT_TXT[o.k]+')':''}</span></td><td>${fmt(o.ok+o.rw)}</td><td>${fmt(o.ok)}</td><td class="o">${fmt(o.rw)}</td><td class="${rc(rej(o))}"><b>${rej(o).toFixed(1)}%</b></td></tr>`).join('')+
+   `<tr class="tot"><td>Total</td><td>${fmt(t.ok+t.rw)}</td><td>${fmt(t.ok)}</td><td>${fmt(t.rw)}</td><td class="${rc(rej(t))}">${rej(t).toFixed(1)}%</td></tr></table></div>`;
+}
+function donut(id,rows,top){
+  const e=defects(rows,top),tot=e.reduce((a,x)=>a+x[1],0);
+  mk(id,{type:'doughnut',data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1]),backgroundColor:DCOL,borderColor:'#131a31',borderWidth:2}]},options:opt({cutout:'52%',plugins:{legend:{display:false},dp:{on:true,label:'Defects'}}})});
+  return '<table class="lg">'+(e.map((x,i)=>`<tr><td><span class="dot" style="background:${DCOL[i%6]}"></span>${x[0]}</td><td>${tot?(x[1]/tot*100).toFixed(1):0}%</td></tr>`).join('')||'<tr><td>No defects in range</td></tr>')+'</table>';
+}
+
+/* ================= PAGES ================= */
+const PAGES={
+overview:{html:c=>kpiHTML(c)+`<div class="grid">
+  <div class="pn w2"><h3>📊 Production Trend</h3>${cv('cProd')}</div>
+  <div class="pn"><h3>📅 Monthly Rejection Trend</h3>${cv('cMon')}</div>
+  <div class="pn"><h3>⚠️ Defect Type</h3>${cv('cDef',230)}<div id="defLg"></div></div>
+  <div class="pn w2"><h3>👥 Shift Wise Production</h3>${shiftTable(c.cur)}</div></div>`,
+ charts:c=>{
+  const d=grp(c.trend,r=>r.DateKey).sort(byKey).slice(-10);
+  mk('cProd',{type:'bar',data:{labels:d.map(x=>dlab(x.k)),datasets:[
+    {type:'bar',label:'OK',data:d.map(x=>x.ok),backgroundColor:'#3b82f6',stack:'p',order:2},{type:'bar',label:'Rework',data:d.map(x=>x.rw),backgroundColor:'#f59e0b',borderRadius:4,stack:'p',order:2},
+    {type:'line',label:'Rejection %',data:d.map(rej),borderColor:'#34d399',backgroundColor:'#34d399',tension:.3,pointRadius:3,yAxisID:'y1',order:1}]},
+    options:opt({plugins:{legend:{position:'top',align:'end',labels:{boxWidth:12}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{callback:v=>fmt(v)}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>v+'%'}}}})});
+  const m=grp(c.b,r=>r.DateKey.slice(0,7)).sort(byKey).slice(-6);
+  mk('cMon',{type:'bar',data:{labels:m.map(x=>MON[+x.k.slice(5)-1]),datasets:[{data:m.map(rej),backgroundColor:'#3b82f6',borderRadius:4}]},options:barOpt()});
+  $('defLg').innerHTML=donut('cDef',c.cur,5);
+ }},
+
+production:{html:c=>`<div class="grid">
+  <div class="pn"><h3>🏭 OK / Rework / Rejection by Line</h3>${cv('cPL')}</div>
+  <div class="pn"><h3>🧊 Production by Model</h3>${cv('cPM')}</div>
+  <div class="pn w2"><h3>Daily production</h3>${tbl(grp(c.cur,r=>dlab(r.DateKey)+'|'+r.DateKey).sort(byKey).map(o=>({...o,k:o.k.split('|')[0]})),'Date')}</div></div>`,
+ charts:c=>{
+  const l=grp(c.cur,r=>r.Line||'—');
+  mk('cPL',{type:'bar',data:{labels:l.map(x=>x.k),datasets:[{label:'OK',data:l.map(x=>x.ok),backgroundColor:'#34d399',borderRadius:4},{label:'Rework',data:l.map(x=>x.rw),backgroundColor:'#f59e0b',borderRadius:4},{label:'Rejection',data:l.map(x=>x.rej),backgroundColor:'#f43f5e',borderRadius:4}]},options:opt()});
+  const p=grp(c.cur,r=>r.Part||'—');
+  mk('cPM',{type:'bar',data:{labels:p.map(x=>x.k),datasets:[{label:'OK',data:p.map(x=>x.ok),backgroundColor:'#7c6cff',stack:'p'},{label:'Rework',data:p.map(x=>x.rw),backgroundColor:'#f59e0b',borderRadius:4,stack:'p'}]},options:opt({scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}})});
+ }},
+
+quality:{html:c=>{const t=grp(c.cur,()=>'T')[0]||{insp:0,ok:0,nok:0,rw:0};
+  const mini=(a,b,col)=>`<div class="kpi" style="--c:${col};--cb:#18213f"><div class="t">${a}</div><div class="v" style="font-size:30px">${b}</div></div>`;
+  return `<div class="kpis">${mini('First-pass yield',(t.insp?t.ok/t.insp*100:0).toFixed(1)+'%','#34d399')}${mini('Rejection rate',rej(t).toFixed(2)+'%','#f43f5e')}${mini('Not OK qty',fmt(t.nok),'#f59e0b')}${mini('Rework qty',fmt(t.rw),'#f59e0b')}${mini('Rejected qty',fmt(t.rej||0),'#f43f5e')}${mini('Inspected qty',fmt(t.insp),'#3b82f6')}</div>
+  <div class="grid"><div class="pn"><h3>Rejection % by Line</h3>${cv('cQL')}</div><div class="pn"><h3>Rejection % by Model</h3>${cv('cQM')}</div><div class="pn"><h3>Rejection % by Shift</h3>${cv('cQS')}</div></div>`},
+ charts:c=>{
+  const f=(id,kf,col)=>{const g=grp(c.cur,kf).sort(byKey);mk(id,{type:'bar',data:{labels:g.map(x=>x.k),datasets:[{data:g.map(rej),backgroundColor:col,borderRadius:4}]},options:barOpt()})};
+  f('cQL',r=>r.Line||'—','#22d3ee');f('cQM',r=>r.Part||'—','#f59e0b');f('cQS',r=>r.Shift,'#a855f7');
+ }},
+
+defects:{html:c=>{
+  const e=defects(c.cur,0),tot=e.reduce((a,x)=>a+x[1],0);let cum=0;
+  return `<div class="grid"><div class="pn"><h3>Defect Pareto</h3>${cv('cPar',Math.max(260,e.length*34+60))}</div>
+  <div class="pn"><h3>Defect details</h3><div class="tw"><table class="tbl"><tr><th>Defect</th><th>Qty</th><th>%</th><th>Cumulative %</th></tr>`+
+  (e.map(x=>{cum+=x[1];return `<tr><td>${x[0]}</td><td class="r">${fmt(x[1])}</td><td>${(x[1]/tot*100).toFixed(1)}%</td><td>${(cum/tot*100).toFixed(1)}%</td></tr>`}).join('')||'<tr><td colspan="4">No defects in range</td></tr>')+
+  `</table></div></div></div>`},
+ charts:c=>{const e=defects(c.cur,0);
+  mk('cPar',{type:'bar',data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1]),backgroundColor:e.map((x,i)=>DCOL[i%6]),borderRadius:4}]},options:opt({indexAxis:'y',plugins:{legend:{display:false}}})});
+ }},
+
+trends:{html:c=>`<div class="grid"><div class="pn"><h3>Daily production</h3>${cv('cT1')}</div><div class="pn"><h3>Daily rejection %</h3>${cv('cT2')}</div><div class="pn"><h3>Day-over-day growth %</h3>${cv('cT3')}</div></div>`,
+ charts:c=>{const d=grp(c.trend,r=>r.DateKey).sort(byKey),L=d.map(x=>dlab(x.k));
+  mk('cT1',{type:'line',data:{labels:L,datasets:[{data:d.map(x=>x.ok+x.rw),borderColor:'#3b82f6',backgroundColor:'#3b82f633',fill:true,tension:.3}]},options:opt({plugins:{legend:{display:false}}})});
+  mk('cT2',{type:'line',data:{labels:L,datasets:[{data:d.map(rej),borderColor:'#f43f5e',backgroundColor:'#f43f5e33',fill:true,tension:.3}]},options:opt({plugins:{legend:{display:false}},scales:{y:yPct}})});
+  const tp=x=>x.ok+x.rw,gr=d.map((x,i)=>i&&tp(d[i-1])?(tp(x)-tp(d[i-1]))/tp(d[i-1])*100:0);
+  mk('cT3',{type:'bar',data:{labels:L,datasets:[{data:gr,backgroundColor:gr.map(v=>v>=0?'#34d399':'#f43f5e'),borderRadius:4}]},options:opt({plugins:{legend:{display:false}},scales:{y:yPct}})});
+ }},
+
+reports:{html:c=>`<div class="pn"><h3>All records <button class="btn" style="float:right" onclick="dlCsv()">⬇ Download CSV</button></h3><div class="tw"><table class="tbl"><tr>${['ID','Date','Shift','Line','Part','Stage','Loaded','Inspected','OK','Rework','Not OK','Rejected','Defects'].map(h=>`<th>${h}</th>`).join('')}</tr>`+
+  c.cur.slice(-500).reverse().map(r=>`<tr><td>${r.ID}</td><td>${dlab(r.DateKey)}</td><td>${r.Shift}</td><td>${r.Line}</td><td>${r.Part}</td><td><span class="pill">${r.Stage}</span></td><td>${r.Load||''}</td><td>${r.Insp||''}</td><td class="g">${r.OK||''}</td><td class="o">${r.Rework||''}</td><td class="r">${r.NOK||''}</td><td class="r">${r.Rej||''}</td><td>${r.Defect.replace(/;/g,', ').replace(/, $/,'')}</td></tr>`).join('')+`</table></div></div>`,
+ charts:()=>{}}
+};
+
+function render(){
+  kill();
+  const c=compute(),P=PAGES[page];
+  try{view.innerHTML=P.html(c);P.charts(c)}catch(e){view.innerHTML='<div class="pn"><h3>⚠️ Could not draw this page</h3><div class="m">'+e.message+'</div></div>';console.error(e)}
+  const n=new Date();$('today').textContent=n.getDate()+'-'+MON[n.getMonth()]+'-'+n.getFullYear();
+  $('lr').textContent='Last Refresh : '+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  $('pill').className='live'+(CSV_LIVE?'':' off');$('pillt').textContent=CSV_LIVE?'Live data':'Sample data';
+  note.textContent=`${c.cur.length} records in range · ${dlab(fromDn(c.lo))} to ${dlab(fromDn(c.hi))} · Shift A 06–14, B 14–22, C 22–06 · Model = Part No`;
+}
+function dlCsv(){
+  const c=compute(),h=['ID','Date','Shift','Line','Part','Stage','Loaded','Inspected','OK','Rework','Not OK','Rejected','Defects'];
+  const L=[h.join(',')].concat(c.cur.map(r=>[r.ID,r.DateKey,r.Shift,r.Line,r.Part,r.Stage,r.Load,r.Insp,r.OK,r.Rework,r.NOK,r.Rej,'"'+r.Defect.replace(/"/g,'""')+'"'].join(',')));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([L.join('\n')],{type:'text/csv'}));a.download='paintshop_report.csv';a.click();
+}
+function editTarget(){const v=prompt('Monthly target (Nos):',MONTHLY_TARGET);if(v&&!isNaN(+v)){MONTHLY_TARGET=+v;try{localStorage.setItem('tgt',v)}catch(e){}render()}}
+try{const t=localStorage.getItem('tgt');if(t)MONTHLY_TARGET=+t}catch(e){}
+
+/* ================= LIVE DATA ================= */
+function load(raw){
+  const rows=normalize(raw);
+  if(!rows.length){render();note.textContent='Connected, but 0 usable rows found ('+raw.length+' rows read; columns: '+Object.keys(raw[0]||{}).join(', ')+'). Check the sheet has Date, Line, Part No, Stage, Loading Qty, Total Inspection Qty, OK Part Qty, Not OK Part Qty, Defect columns.';return}
+  ROWS=rows;setFilters();
+  let auto=false;
+  if(!USER_DATE&&fDate.value!=='all'&&!compute().cur.length){fDate.value='all';auto=true}
+  render();
+  if(auto){const ks=ROWS.map(r=>r.DateKey).sort();note.textContent+=' · No records in the selected range, so showing all data ('+ROWS.length+' rows, '+dlab(ks[0])+' to '+dlab(ks[ks.length-1])+')'}
+}
+let CSV_LIVE=(()=>{try{return localStorage.getItem('csvurl')||''}catch(e){return ''}})()||CSV_URL,timer=null;   // a link saved with Connect Sheet overrides CSV_URL
+function csvUrl(u){
+  u=u.trim();const m=u.match(/spreadsheets\/d\/([^\/?#]+)/);
+  if(m&&m[1]!=='e'){const gid=(u.match(/gid=(\d+)/)||[])[1];return 'https://docs.google.com/spreadsheets/d/'+m[1]+'/gviz/tq?tqx=out:csv'+(gid?'&gid='+gid:'')}
+  return u;
+}
+/* Google's published CSV blocks browsers whose origin is "null" (a file opened from the phone / a local file).
+   Try the direct link first, then fall back to CORS relays so it also works when opened locally. */
+async function fetchCsv(u){
+  const t=u+(u.includes('?')?'&':'?')+'t='+Date.now();
+  const tries=[t,'https://corsproxy.io/?url='+encodeURIComponent(t),'https://api.allorigins.win/raw?url='+encodeURIComponent(t)];
+  let err=new Error('unknown error');
+  for(const x of tries){
+    try{
+      const r=await fetch(x);
+      if(!r.ok){err=new Error('HTTP '+r.status+' (is the sheet published / shared?)');continue}
+      const tx=await r.text();
+      if(!tx.trim()||/^\s*<(!doctype|html)/i.test(tx)){err=new Error('Did not receive CSV - publish the sheet as CSV');continue}
+      return tx;
+    }catch(e){err=e}
+  }
+  throw err;
+}
+async function refreshNow(){
+  if(!CSV_LIVE){render();return}
+  if(!ROWS.length)note.textContent='Loading live data…';
+  try{
+    const wb=XLSX.read(await fetchCsv(csvUrl(CSV_LIVE)),{type:'string',raw:true});
+    load(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}));
+  }catch(e){note.textContent='Could not read the sheet: '+e.message}
+}
+function startLive(){clearInterval(timer);if(CSV_LIVE){refreshNow();timer=setInterval(refreshNow,REFRESH_SECONDS*1000)}}
+
+function connectSheet(){
+  const v=prompt('Paste your Google Sheet published CSV link (leave empty to use the default link):',CSV_LIVE);
+  if(v===null)return;
+  const u=v.trim();
+  if(u&&!/^https?:\/\//i.test(u)){alert('Please paste a full link starting with https://');return}
+  CSV_LIVE=u||CSV_URL;
+  try{if(u)localStorage.setItem('csvurl',u);else localStorage.removeItem('csvurl')}catch(e){}
+  USER_DATE=false;note.textContent='Loading live data…';
+  startLive();
+}
+
+/* ================= LOGO ================= */
+const LOGO_SRC="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWQAAAB2CAYAAAD/cukEAAAc+UlEQVR42u2dd7gVxdnAf5eOdBAUxEKQaJRgQREVCWpUgqiJhVhAjC0a7L1GRGONiIolFhRFRdRPUEFE0c/eUCyooGIFEY1KF6TM98e+52MZZvece2bOnnu57+957nPP7uzOzE555513WoUxBkVRFKX81NIkUBRFUYGsKIqiqEBWFEVRgawoiqKoQFYURana1KnB394WuBDoCNTL82yFZ1iLgfWAhoAB/gu8A0wC3gJWVKF02Q04UtKlQuJeX+KdS4tcQ74KWAmcBHxW4nh1A64HagN1gflAA2C5xCGN2sBC4HHg9hLErRVwKrCfpMlPwDKpX80l7PqxeNSTv1+kTAA8B/wTeFX8+BloJmVjZSzNc2XRxPLASHiN5fp4YGbgb+wt+dxC4rSepP1iS7lz1ZWmwFLgAeCW2P1+Et9G4u+rwJs1WSBX1OBpb2cA11WRuMwHugBflzke9aXiVJa3gR1KHLc2wNwA/hwOPBg4blOArp5+nA9cJWVgY0+/XgJ6Bvy+1sD3Afy5FBgsv48CxotykhNC2wM7AzeryaLm0bAKxaUZ8BUwGdinjPG4pMj3ugL9Sxy374HjAvgzPHC8zgsgjN8VYQxwRKBezu4Bv3FgAD+mxYTx7qIJ/wA8Jb2xobFe49YqkGseK6tgnPYAJgKjy5Q353u8e24G8btTtHEfWgJjAsVnC+DKwALvJeDhAH4OCpju1wbw447Y712Aj+T3dCLzyndy/akK5JpJRRWO21+lYG6eYZh7e77fGfhjBvHsBczx9OMQ4GBPPxoF0rZvAd637p1AZMby4SBgxwDxOy2AH9OBG60eQY4ewAjWHMepsXbUmiyQ61fx+P1GhHLbjMILoeGek0E8F8W6vj74aqHHBWiA5iZosj+x5uBXsVwYwI/zAvhxvHXdKfb7NeBoYIH1/SqQaxgrqkk8Z2SgzbcnMpf4sldGaXI78GwAfyYV+V4XohkfvuyX4nZBAP8PsIRfZekJbOAZhzeIzDBxpojZAuAb+f9VrAf0vgpkparShDA2xTQOC+jXARmlS99ADUgxA1YTA4R9B9GUx1L3OHxsyZcFCL+f497LwPoifK+Re+OkHNYmGuyrkdTkaW8XBSpwWXFurPCGZhawUSC/spgCl+O0AJrqHOC3RKaQQhhM8bNRcnwgWnYhfAT8zjO8FsC8Sr7Th2hamg9DgTNT3LcE/kw09W0Z0UyMqTVZ+1KBXL1oRXj7WlfpQoakTYZazotE07x8uI9oMUw+egHPB4jzbqIlFsKe+JtnrizCBDJDGqpiWSS9O0VNFusspdCQry+Bn4MyTJP9A/gxADg0o7S6sRLCGKK56a96hnkKlZt339VTGEOYQUnVkFVDrvp5FtivVSWIY9ba0SGEmVvcQLrOLkYTTUf0YXqR5odOwCcBGoJTC3x2Gv5zgStQVEPOkPOJBoW6SRd0F2BXolVIe8j/3eWZpyhuSbKLkINmR5QobRoT2SCz4mHC7KVxdcL9ngGEMRQ/9/lT1pzHW6yWXAhdAgjjw1U8FEcdTYKieZzVq43y8SxwINFCAt95xX2JRqSrskCGaCn1hAzzowerV3sVy6lEU+HseP9PgPhdB3zo8f4llRCqSQwgspencYxnGK8Qfq8QNVmoySIvW1dCIMdZ6dkzmQb8PsD3dyYa7S91DyzLAnYAMDZEvYj9HgqcHtjPYvHdEOtX8i+I8s2v30sZVdRkUS34k+f77Yk2I/Ll6Ay+9biM03ZcIIH8jPzfLZAwDrXRz1CihRbFUi9Pr+jeAL0AFcaqIVcrDRn855b6hJ1jEdF+DKXkC6Il4FnSFvg2gD8nAX8P0BvJbasZip7ACx7vvwdsWyLtuC7VZwWsasjK//OQ5/u+W4cekYEwBugAbJJx2s4Bbgjgz/AAwvi1wMIYonnXPlryNriXbN/tGa9rVRirQC4nPtPFZpc57mdnGNaJZfi+04Cnq0AZ6Vcifw/1fH+I495RHv59TzYbS6lAVkqCr+blM4WupWhJWXF8mdJ4EKWZY10olxMtSS8FX+K3YnBbVm/uA/4zK07WKq0CuTrjsyvaQk8N+8yMv7Ul2W04FGcm5Vv48yNwcRXveVwe++2zxeYUwm34rwJZkyBzDsRvQG8Wld8oJs4pZfjmY8uU1oPxP2GkGLpnEMYM/GzluxMNgO6H30EIx2qVVoFcXekC3Orpx3OegqJxGb67L9F0vXLQI+PwTqf0J3DnOAO/g3HfxW8T+1FEszYUFcjVLu0OIVpC3cYzXJ/Vbz6HVV6G3+ZG5VpOu5RoimMWfAgMy/DbVuG3FWgbYCeP9/+pYiAsOg+5eB4nmmdbm2gVlpEKYuS6HrAe0dzMQwm32UptihusqkN0TE6xU+YqgO2ITgYuhjlAuzLm9yRKf6LJTkSnKWdNyP2sC+U64CwVoWHRvSyKZ/8yhHkBxc8cGOghjBfK/2nSCHUowo+2Yj54uUz5dTSrjwsqBdeXSRhDNGXtmQzDm6vCWE0WNZ25+B057zNP9Hz5vxx4wlMolotZlG6u7GtE9txy8WzGAvlMrY5qsqhqJous2ZXiNyrfGL/Bn4asnvvsc8LIfKB5mdPxv0Qnr4TCAJuWWPsuhJZE0+1KzedARxWdqiHXZN7G79SIaz3etfdy9plG1gy/gcUQ7BTYvwuqgDCG6Giv4RmE8w+tjiqQazpd8Vsu67O5+j2Oez57cRxc5rScSbRxUAjmEn6vCh9OBhaX0P93qRpL0lUgr4NUtwHNB4sUyr09wpyP+4DN2zz87EtkQikn7wTy55sqWE7+VUK/j0BRgaysIZQru3uajzY4Hvcp1/+L3+KHcs9fHR3Inx0o3QZCxXIl0daqoRmK/5avigrkdY7bK5m/+3qElXZUlM+xRuVcbnsrYbcE/XcVLCOnBfZvIX77XSgqkNdZ9qHwrRIHeIY1McXNd5rVzmVIuy7ACYH93Jhoz4yqxF347ZlsM5hoyqNSYmrytLfB+C07LSc/AusX8NznFLeIA6Lz9rrkeeZ9it9K9Blg74zT7VP8NtJJoy+Riaeq0JEwe2osApqoqMwGXalXPP8B3iJaIr3M1djFfq9HNFe1D347veVoRbT94q15tMEOHmEUMlVuFHB1kf7vJT20rPYsHl5CYQzwmJSFqsJMojGHwzz9+ZtWddWQq4OG3JXKj9bXAa4gzIkdc4ENU9wfJdrqs1gKOR+tC367fR0DjMggr3fHb5e8QrmK1asaqwK+C4IWAk1VTGaH2pCLp5hTO1YQLd8dECD8DYBOKe4+wvgzCjsf7X385r1mddLEcxmFcx7Z7IVcKL7T8t7Waq4COSt8D2T06WqPIszx8kk2WN9ZDJdX4tm7PMLZFtiqxPn8SMblaiTlXx4eqn7roaUqkGsMwwL40Tnh/t89/X23Es/6nqBdyl3DtgcOyjhffwucqsVbUYFc/bjP8/0dHPc6JtwvlOepnF34Vc9vKOWg0Ygy5etgynOOoKICWfHgds/3XbMoDvH08/Ei3hnlGeZ+JUjbMWR7urbNWC3eigrk6oXv+XaNHPd8TyOeVMQ7V3uGGdps0S1AwxSCu7WIKyqQqw++c3DtQZce+C0LnkZx+xVMA2Z7hNsTaB0wXScF8CPESrejyP6QVUUFslIkvT3ftzf+udTTv3vLqA2GsiXfSbTvsi/dCTM49yQ6l1dRgVwt8J36ZgvkPTz989nr9jHPsEPMhuhFtNjElz/J/xuBFz39agY8oEVdUYFcWnznaA4JEIcPYr9P8fRrMdFCj2J5Bz+zRTf8Nxx6NECaDmbNTZWOD+DnvkSrBRVFBXKJqO/x7iDg4gBxiM+I8N08/K4A8RlTxh7DY0TnyvnwMWufsziDMIt4bkBNF4oK5JJRzEYyLYGbCXf2WW4V2s6iYfoQYl9f32l8xc6M6A38OUD8++MeaB2Gv+ni90T2bUVJRHd7K56zgQ+lUaub59nawGbAH4E2gcKP24//4unXh4Q5jmh6AD/y7WLn4p4A4d5G+mZRx4i27KPEHCI9mfu1+igqkMNyWJnDPyr2+3BPv0YFjNdE/GaPnFtJgXw30UZLPswl//ztz6QRvs4zrDtVICtqsli3+Ax4Qn4fDWzk6d8TAePme9TPpsDWBT57KIWfnpJGoefiDcV/qXgDFciKCuR1i+MCCsA3iUwWoXgP+MLTj/4FPvdggPheQ+Xsw/sGCPNwdNaFogJ5nWA80anPEI3adwogQEPjqwH2Zs0TV1yMDBDPRUQmksowD/8phhDu5GtFBfI6QXU9KqVv7PfVAfwbXoI4+mqu2wJ/yGNiODJAPLcr8r2b8Dt1G6LB3UklLit1Pd+vrSJSBXJWVLdTdBey9plwIU5Qfr8Ecf0I/70gTkq430zMDL48jN8hoCEWjOxFNAZQKnwH7eujqEDOUMBVJw4kOrgyx8AAfo4pYXxf93w/aSn1PUQDfz58TeEDeUn8SJgBxdtKmAeLPd9fiqICOSNaVqO4dgCete4dHMDfE0sY56cC+HGFdb0PYRaAHBHoG0fiPyBalzBLvl00UvmgAlkJxy1Eg1tfWvc3wX/fh+msvTlRSJ4GfvH0wz7BeWKAeJ0JvBzwO3cK1PvZswR5sCRAY6GoQK7xTCQ6m21Qgvu+QCvPMIZk8B0hZkJsLP8vDBSnoSUwC4TQ2scBDatYOZytVVEFclZ8VwXjNBb4HdH2j5+mPNfeM5wVgbXEJEKc+LwP0I7KnYSdxIASfec4/GeWNCJaWh+SFp7v/6AiMltq8tLpu4imHtUnOkppVYkbrl+JptrVl3RfLBrI98AUh1kijQuBn4n2x1gSi19u7m5uSt8q6xsqxExxHdkM2EwmOnD14Fj4tRLStxawTLrJ9YD58o25DXkuFcE8G2gi5hAjebciTxosIdoZ750SfuvhRDNWNpI8XV/i9L2UswUidFcQzX9uIu/Nk29uHcDEYPMTsCvuMwtrWaaJRbHyUk/SeQRKplQYYzQVFEVR1GShKIqiqEBWFEVRgawoiqKoQFYURVGBrCiKoqhAVhRFUYGsKIqiqEBWFEVRgawoiqKoQFYURVGBrCiKoqhAVhRFUYGsKIqiqEBWFEVRgawoiqKoQFYURVGBrCiKoqhAVhRFUYGsKIqiqEBWFEVRgawoiqKoQFYURVFUICuKoqhAVhRFUVQgK4qiqEBWFEVRVCAriqKoQFayYDuglybDGrQB+msylJRewNaaDNkJ5FuBD4D7gbHAK1bFH53ybgNgKFDX4XYGMBW4F3gCeB0YBuxmPXcvcIl1b0ie73nAuv4YmADcBzwKTAS2iMVxqnzf7cCd8myObsBMcR8hbhc5wrwIuMa6d0UsHBcjEu7vBkyOxfcFyYcdU/zaBWiRkr8PSV6NkHwcCzQX980krDS/c2m+FfApsHfCs+2Ap6y8usl6ZiTwouTtrcBtwL4J/tUHTpYyOA64GXgDOLSAcr0xsHOKex8pC3FOBHqnvHMN0Cl2fZnUiYfkWyYDgxzvbSlpPkmefQS4GNjAeu4I4F15boJ891PAk8AsYBt57mop18MlX98AjnGE21/iNEnK0qvAhUDr2DM3S310safUT1LK6vYp7s2B/fPk0wbAwQluDYEbgJeB5+T/yBQ/Z0pa3CbfOtxRB9vLN3WzwnkG2CTB35ZSVnLuxwMzpBw/Ink0QcroRKAzMECeaZ4g/w5MTBFjTNLfM8aYccaYusaYhsaYzS13Y4z5V8K79Y0x06x7TeWdGxzPX2SMWWTd+9UYMyR23dIYM8sYc0VKnI3j+nh5t6Uxpl3Mrau4by/x3cwYs3PM/WJxbyDXPYwxHxtjplhhPGWM+dK6t1DSLimeXzruzTLGjDbGbGPd72+MecsYs1WCX0cZYw5JcGsn33CsMaaO5GPnmPsW4r5nwvt7GmNuj12/YYx5IeHZAcaYsbHrccaY2dYzq4wxD8Suz5fw/2I919AY87YxZph1v7ExZowx5nl5Jil9uxljrk5xv8RRVl43xkyVdHK984Ixpk/seoKkR2spW53lf/ydmyWve1n3TzPGzDTG9I7da2aM2dEY01by1Ei+trPK5cvGmMnyu66jXiJpPMEY0zF2r46U6dus+pFUn4Y40ij+d6XEM8m9jzHmI2NMrZRn7pZ0t+93l7D3se7vboyZaIy5zvHOR8aYa2LXtzniv7Xc6xm710PudU+IY2Nx7xTLp22k/PWL1Z/NJX65Z4wxZniCjOqclCZpAnl0gvCMe2ykUrncJ1vXs6WSJfnXxrr+3Bhzp3VvYsqH4vDfSIK7nm2Vp8D1M8b8YN07w/HOaEfj87Y890pK2savHxGBnBSXLVPcjjLG7J/yjStT3m8Ty8ddHO5djTEnxq4PS0mzZ6TRzV2PcFS2GcaY0617zzueM8aYh1K++WURnknuvVKUBYwxAx3fcYPce9sYU+F45xGrjN4rf0lhnJKnfPWxKrqd30nvjhNBn+Tvk8aY71Lc7QbyvAS3Q/PEf4iUh7RyaVKEdn1jzHJHHeko7/XPI3vOtu59Yow52vFcPI4d5F5Hh1KSpPA0F/d2DrcNxK2xw+0cR/odlSfvUk0W9YGmCW51gS+AE6R7fpnjmXmx3wOlS7t3SnjfW9fL5c+l8g9KCLO2497ChPDq5elONXR8/wrHcxWOuH8N3Chdfle3r1Hsd0fgoJSuG8D0FLfaln9xFojZonWKaWk68LB0vztY7i2s9BsNrAIOs57bTLqMC2L36jhMKcuk27hGJw34xOpqA5yS8s1nAdtaJoQ4i4GVRZjwRgFdgC8dbo2B+bHr2cCGKX5dnlBGc0wAvgH+nVD3SOjyLk7xs4uYgE4q8HsrinRD0rdhivuOwFzg7gT3K4E3HWk4GFgqeZHEjQ4zIZa8yJX5F2L3Fsn/Zo60TmJZrDyTIA+WJZi43rbMeOcmmLUKsiFXAG3FztPcMuAvB34A/iMF7yLLFthQbCg59pWC9GMlKkcdRyLUAq4HrpIwBzkSz/6mPSQDNpPvsTNid6lsbazwVspfy1hhPw3YyRHXjo5BpVNFuPQVW12cJbHfPfI0HBRQYJYmuC0HvgU2lfxsKvbVuPtkoJ/YxD6PfS/Ae5YwN2JTt+2OezsanoXWd+bSZUrs+i9Srk62hO3jVoNu84X8P6jINHMpGpuKINtS7IXPWO7TrLTbSMpTfVFQtrNs702sMQkXjyfYRFc4lJp4A7yR1Mt2Vpxyjd2bBabDxzIutAWwueTPJpIGO3iOT/1O8vcTEb5xWgFzpC43dNi+78vj99Xyv3vs3oaSJq3Fvj1M7O7fxp750VHXFqYI3Lji5lLgWjgUrDgny7jEjlJnzixE6CUxWwZyDpYAtwSOtionMkCxiQw+7CbG91+A9azCPq+SGfqLpZEQ08DOl/CHi7/3x7SHVY7R4KbSgLQA/mUV+j1EoDSUgZS7Yn41lDBy179xxHOpQ0POxft+eWeIxP18SfP/WpoXwIdFFvx6DsEX14DrSKVvL79XxipIC6mEAH+QNP1RvnupuNm9gutk8KldrLDvJ39xmji0rO9EuzlA4jPEMbjVUdJ6Wco3z00RrMXynYT9jpT16TKofGls0PInK907Av8QwdwaOE/ilhMyP+cJc0lK7zSN7aWX0kbS4KTYACKieRfCQqAncJz4s0Tq7XLpgSz2SM/2wGuS38Ol7OfIKVV1Je3aWYLzuwIGA7HKzgcyWPa19Jz2l4F6e6DR1mhrFSiQVxbYI4/zmgw0jgUek4kORQvkdtJ1u7mAdweKhvCSjGC+ZT37bcpMgJyGNVRGKOMtnl2gfxv7fYEUolGSCS8lfM9VkjAus0uuQUnq9s6W0ffnUuLewBFufdH8PpRua4tYZR1maVMLYvFZnjBa/ZIUsC8Suo4mpZfTUGYBPO9wbxbrxiGVcYFoLy2lIZ5jvfOe/D9HegzbWL0hHI12vMs4XEb9PxABMskhpH7KU25zGskPRQoLl/8bxSrdDOnZPCma4wBJm5WWWWqsCJckQds9JW0QhcfFrynvGBnRH5ZgosrluykgHTaXmReub+gHXOvZwOVmcgwX08xZUse/AT6KKSNN8vQ4k8wpX1vmmr/GeiU3SINzDKtnNdV1mDYaxBQrFz+nWBNqO/xzybb5BfSW8posfrUqq0sQ2farp6W71MNye05arSSbU1fWntO4wqEB2fE9iWiq24tSaeZXotGpkydtWooGMl/it70UXpfgru2wP8cbkzNEU7hetK64rfUd+d8nIR4drIbKVShWpvQyKhxCNcdMy0Txi8R9ifQ0GiWUkQdYbfO+GPd0wCUJpoIW0v0/WyqNne/XizBMs0/m0mqkh5nH5nOr6zletND+0qjOtoRcJ5LHIV4rUINvCTyYxxbqqnd1U0wgiGAqhJYk28FbWL3cytDWKnMnSHe9myheF1o23XjDNLYAc8mJIh+mxu59aQnyRdJwHR+7Ny+meNhy4JeU+pVUZmoVoCnn6vonIQRynTyJbtNbVPSXLBPFTaIdPpDg1xyHqaFNrDttdzniHCENwb3S4rs0SBer8qTNSvn+XPdxAJG93BacrR3Co7tDQzmVaI7kYBHwxEwVr6bYl6amaHW571gvpcI1JnlQr7VohnZDuLVoF88lpNNAeW+ECN6lCV3Wpg6BnCv4/wbuEOGMVVYgfWDqGKIBk5+KFBhtHPd2dNSH0ZLvF4lp4lfLHplmWhiax2bYh2iu9MUJaUdCvtVPqAeI6eylmFmuELPgigS3pgUoLUl0t7Te/8j/NxJ6NXGl4A7pCW+X4v+xwJGOBsQeh9nQahjaOmRXvTyysGmKArd+AXK0QWUSLs2jTpbGUNcKZGFKZuBo5fYH/kw0K8NmM0dcKiyNt5FDeMQbgtcShG+asLIrZy2rO7ki5uco6cKOt96pcAieigTt6ESiAYv1rfu7EtnfX3C809lRaAuxQ8YLQ4sU+9i3jvvzYo1GK4f7Csmbv7Hafu/qWv/i6JXE7fC5svC61ePoTzRKPdDh70hJL59BpxYJgq6Z4/4oVs+WaGaZONK61mcSjZ08mtAjHE80KDnT4d7YMs3YZqZVjmdz9JVe1QiHJr2fVf8apigmTck/0yKJ7VnbDnxcTIGKp7n9nROIxineSWjwnhBz14OO+MbrSC+iAfhbY/daWSaPuHa7VYpiliRHmhWgIS91hJlIWgv4rpghJkvG1hONYZgEMiXl3eYODedNidQjYlebTTTK+xtR6+0VW+OJVobFK+rjKWH2ZO0VcJ8A/5QuUwdJ1P6iXf0gNqh7JNHbSKuey5j3RUCusAr0ZNHict3CKaw9qDcmpcE6MkGIVgCnSwWdJf9bSCPRD7f9OFcQv0xw+1YK9glSEZqKIDlMNPNf5TtdfCoNaNLAzp7ALdI7cfGKQ/t6RSpTvJu5L9Hg3n6snqlxvzR+DwKHiL0RYC+iVZUD8WMJ8Kx17+mU5/8plTmu3b0l5TefrfMcaXBmyPvbiUmiYYrd8luiQcXZDreXJe0fjWl6Y1htU14g4d4kefhuzPQ0Vey48frxXkIcPpGwiqEpa89SudNRHpbJc7aycZZ8zzQpn18RjWl1Jhp0v94hx8YAfySa3dFeFIKNpS7l+FrSdZZlCXhPFMaj5Z0fiMZ83hOh+xVr2qtzfCH1KN8U2g8ocAC6whhDmWgsibYYxaXZtiDZ9hvnH0SzNsasw+nRXoTUqgKf7yIV7PIq9A2NRKh/XYawCx3kqwyDRSCNzCD+HYgGAles6xW/ThnDXqRyN7WbM6fAZ1ey7m8SNauSz69H+qyecrC4jMpHKbSuJhnKjy9qSsXX3d6qPwsofvrXukraYhklDPNIH79QqpmGrIRhKmvbsGs6H7O2jVgJy3jyL3xRKkk5bciKoihKDDVZKIqiqEBWFEVRVCAriqKoQFYURVFUICuKolRx/g/pZBj4R2kf3AAAAABJRU5ErkJggg==";   // Baxy logo embedded (white version for the dark header)
+function showLogo(src){const el=$('logo');el.innerHTML=src?'<img alt="logo" src="'+src+'">':'🎨'}
+try{showLogo(LOGO_SRC||localStorage.getItem('logo'))}catch(e){showLogo(LOGO_SRC)}
+$('logoF').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{const im=new Image();im.onload=()=>{const h=120,w=Math.round(im.width*h/im.height),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+    const d=c.toDataURL('image/png');try{localStorage.setItem('logo',d)}catch(x){}showLogo(d)};im.src=rd.result};rd.readAsDataURL(f)};
+
+/* ================= EVENTS ================= */
+(()=>{const t=new Date(),f=new Date(t.getFullYear(),t.getMonth(),1);$('dFrom').value=localKey(f);$('dTo').value=localKey(t)})();
+fDate.onchange=()=>{USER_DATE=true;$('cust').style.display=fDate.value==='custom'?'flex':'none';render()};
+$('dFrom').onchange=$('dTo').onchange=render;
+[fShift,fModel,fLine].forEach(e=>e.onchange=render);
+$('side').onclick=e=>{const b=e.target.closest('button');if(!b)return;page=b.dataset.p;
+  document.querySelectorAll('#side button').forEach(x=>x.classList.toggle('on',x===b));render()};
+$('f').onchange=async e=>{const file=e.target.files[0];if(!file)return;
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});load(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}))};
+
+setFilters();render();startLive();
+</script>
+</body>
+</html>

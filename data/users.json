@@ -1,0 +1,36 @@
+[
+  {
+    "id": "usr_admin_permanent",
+    "username": "admin1",
+    "displayName": "Plant Administrator",
+    "role": "admin",
+    "passwordHash": "a28e62cf2ad5bdac7338a0bc6e9b9994:62638aaff8dd303c53b84503a1dbb94f267ab7833fe255b5ec95b80875901023cdfb84ea99262e0bd1422accb23e206988aa72df94679d8f3d90c70a0c2d364a",
+    "recoveryCodeHash": "88a87ea2e8d4eec415c57b4ea4211a4f:bc6204ba48089f039a67945afecfb35fd386e973b30b0f4032651f3469020e8b44b360b4404f8a3269eb7a0fe61df4491d000fa683152e822a1e8ce8ca2bb21c",
+    "mustChangePassword": false,
+    "isActive": true,
+    "createdAt": "2026-10-27T16:57:46.628Z",
+    "updatedAt": "2026-10-27T16:57:46.628Z",
+    "failedLoginAttempts": 0,
+    "lockoutUntil": null,
+    "activeTokens": [
+      "2cd0b77736a31373ab5a1732a346378550e5e3e3a5c7845537125c781d27172c",
+      "5495701508ed21d7c878649566b627f80c177f377cc847ea686fc0fbcd04c9f7",
+      "5671d6c55f4fbfda06dae09a2b310f136f80b74011d165213b24965dd16e8a75"
+    ],
+    "lastLogin": "2026-10-27T16:58:26.133Z"
+  },
+  {
+    "id": "usr_1793115086380_bo9r",
+    "username": "oprater1",
+    "displayName": "Deepak",
+    "role": "operator",
+    "passwordHash": "415bd4aeba1347c23e25de62f29ddadc:f0bdf50b20c7a7a6fd98d078de587f9a9d8a75cc38a7fac120e92472d47188f912c7323a977986c26d30b9154ac98f083dd06a43ef7a24b21def131ba7c3d24e",
+    "mustChangePassword": true,
+    "isActive": true,
+    "createdAt": "2026-10-27T15:31:26.433Z",
+    "updatedAt": "2026-10-27T15:31:26.433Z",
+    "failedLoginAttempts": 0,
+    "lockoutUntil": null,
+    "activeTokens": []
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "ID": 4352,
+    "DateKey": "2026-10-27",
+    "Shift": "A",
+    "Line": "Powder Coating Line",
+    "Part": "H - 321",
+    "Stage": "Loading",
+    "Load": 300,
+    "Insp": 0,
+    "OK": 0,
+    "NOK": 0,
+    "Rework": 0,
+    "Rej": 0,
+    "Defect": "",
+    "Timestamp": "2026-10-27T11:12:49.280Z",
+    "CreatedAt": "2026-10-27T11:12:49.280Z"
+  }
+]
